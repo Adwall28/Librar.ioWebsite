@@ -8,7 +8,6 @@ let mongoose = require("mongoose");
 
 let express = require("express");
 let app = express();
-let path = require("path");
 let $ = require('jquery');
 
 mongoose.connect(url);
@@ -47,6 +46,13 @@ async function main() {
     const Users = db.collection("Users");
 }
 
+async function updateBookYear(oldYear, newYear) {
+    let Book = await Books.findOne({year: oldYear});
+    Book.year = newYear;
+    await Book.save();
+};
+
+updateBookYear(1958, 1960);
 
 
 main().catch(console.error);
@@ -82,15 +88,3 @@ app.listen(port, function(){
     console.log("Listening on 8080");
 });
 
-app.get('/LoginForm', function(req, res, next){
-    res.render('LoginForm', {
-        title: 'Login',
-        "LoginForm" : docs,
-    });
-});
-
-app.post('/LoginForm', function(req, res, next){
-    // req.body object has your form values
-    console.log(req.body.UserName);
-    console.log(req.body.Password);
-});
